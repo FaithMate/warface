@@ -1,0 +1,67 @@
+@import "./components.css";
+@import "./fonts.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		font-family: Helvetica, sans-serif;
+		@apply bg-neutral-800;
+	}
+
+	* {
+		@apply min-w-0;
+	}
+
+	/* ::selection {
+		@apply bg-indigo-200;
+	} */
+
+	h1, h2, h3, h4, h5, h6, span, p {
+		@apply cursor-default;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		@apply hidden;
+	}
+
+	input[type=number] {
+		-moz-appearance: textfield;
+		appearance: textfield;
+	}
+}
+
+@layer utilities {	
+	.flip-x {
+		@apply scale-x-100;
+		@apply -scale-y-100;
+	}
+
+	.flip-y {
+		@apply -scale-x-100;
+		@apply scale-y-100;
+	}
+
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	@supports (scrollbar-width: none) {
+		.no-scrollbar {
+			scrollbar-width: none;
+		}
+	}
+
+	@supports (-ms-overflow-style: none) {
+		.no-scrollbar {
+			-ms-overflow-style: none;
+		}
+	}
+
+	.drag-none {
+		-webkit-user-drag: none;
+	}
+}

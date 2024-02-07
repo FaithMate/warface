@@ -1,0 +1,36 @@
+.dialog-backdrop[data-visible="true"] {
+	@apply opacity-100;
+	@apply pointer-events-auto;
+}
+
+.dialog-backdrop[data-visible="false"] {
+	@apply opacity-0;
+	@apply pointer-events-none;
+}
+
+.dialog-backdrop {
+	@apply absolute; 
+	@apply inset-0; 
+	@apply flex;
+	@apply justify-center;
+	@apply items-center;
+	@apply bg-black;
+	@apply bg-opacity-40;
+	@apply transition-opacity;
+}
+
+.dialog {
+	@apply bg-white;
+	@apply rounded-xl;
+	@apply p-8;
+	@apply flex;
+	@apply flex-col;
+	@apply gap-5;
+}
+
+.form-select {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAQCAYAAAAMJL+VAAAABGdBTUEAALGPC/xhBQAAAQtJREFUOBG1lEEOgjAQRalbGj2OG9caOACn4ALGtfEuHACiazceR1PWOH/CNA3aMiTaBDpt/7zPdBKy7M/DCL9pGkvxxVp7KsvyJftL5rZt1865M+Ucq6pyyF3hNcI7Cuu+728QYn/JQA5yKaempxuZmQngOwEaYx55nu+1lQh8GIatMGi+01NwBcEmhxBqK4nAPZJ78K0KKFAJmR3oPp8+Iwgob0Oa6+TLoeCvRx+mTUYf/FVBGTPRwDkfLxnaSrRwcH0FWhNOmrkWYbE2XEicqgSa1J0LQ+aPCuQgZiLnwewbGuz5MGoAhcIkCQcjaTBjMgtXGURMVHC1wcQEy0J+Zlj8bKAnY1/UzDe2dbAVqfXn6wAAAABJRU5ErkJggg==');
+	background-size: 0.7rem;
+	background-position: right 0.7rem center;
+	background-repeat: no-repeat;
+}
