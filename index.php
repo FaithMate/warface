@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,10 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/embla.css">
+  <link rel="stylesheet" href="styles/main.css">
 	<script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
 	<script src="js/embla.js" defer></script>
 	<link rel="icon" type="image/svg+xml" href="logo.svg" sizes="any">
 	<title>Home</title>
+	<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+	crossorigin="anonymous"></script>
 </head>
 
 <?php include("./data/index/courses.php") ?>
@@ -58,21 +62,73 @@
 				<h2 class="w-full p-6 font-tactic font-medium text-azure-200 text-3xl xl:text-[44px] xl:leading-[44px] bg-neutral-800 border border-neutral-700 rounded-lg">
 					Наши курсы
 				</h2>
-
+				<?php
+            if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
+                echo '<button class="add-cart-btn">Добавить карту</button>';
+            }
+            ?>
 				<div class="grid lg:grid-cols-2 gap-8">
-					<?php foreach($courses as $key=>$item): ?>
-						<?php 
-							$image = $item->image;
-							$title = $item->title;
-							$desc = $item->desc;
-							$price = $item->price;
-							$hit = $item->hit;
-							include("./components/cards/course-card.php")
-						?>
-					<?php endforeach; ?>
+				<?php
+		$dbname = './components/php-back/courses.db'; // Змініть шлях до вашої бази даних
+
+		// Встановлення підключення до SQLite бази даних
+		$conn = new SQLite3($dbname);
+
+		$query = "SELECT * FROM courses LIMIT 5"; // Припускаємо, що у вас є таблиця `courses`
+		$result = $conn->query($query);
+
+		if ($result) {
+			while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+				// Тут ви вставляєте дані курсу в HTML
+				echo "<div class='ml-6'>";
+				if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
+					echo "<div class='admin-buttons'>";
+					echo "<button class='edit-btn' onclick='editCard(" . $row['id'] . ")'>Редактировать</button>";
+					echo "<button class='delete-btn' onclick='confirmDelete(" . $row['id'] . ")'>Удалить</button>";
+					echo "</div>";
+				}
+				echo "<div class='grid grid-cols-5 bg-cover bg-neutral-750 border border-neutral-700 rounded-lg' style='background-image: url(\"/assets/images/heatmap.svg\");'>";
+
+				echo "<div class='col-span-2 flex items-start -ml-6'>";
+				// Використовуйте правильний шлях для зображення
+				echo "<img class='drag-none select-none' src='./components/php-back/" . htmlspecialchars($row['image']) . "' alt=''>";
+				echo "</div>";
+
+				echo "<div class='col-span-3 flex flex-col font-tactic border-l border-neutral-800'>";
+				echo "<div class='flex gap-4 p-4 border-b border-neutral-800'>";
+				echo "<span class='font-semibold text-lg text-white'>" . htmlspecialchars($row['title']) . "</span>";
+
+				if ($row['is_hit']) { // Перевірка, чи є курс хітом
+					echo "<span class='px-6 py-1 font-light text-xs text-white bg-red-925 border border-red-800 rounded-lg'>Хит!</span>";
+				}
+
+				echo "</div>";
+				echo "<div class='p-4'>";
+				echo "<span class='text-white text-xs'>" . htmlspecialchars($row['description']) . "</span>";
+				echo "</div>";
+				echo "</div>";
+
+				echo "<div class='col-span-5 flex justify-between items-center gap-2 font-tactic text-white p-5 border-t border-neutral-800'>";
+				echo "<span class='font-tactic font-medium text-[15px] text-white'>Стоимость <br> курса</span>";
+
+				echo "<div class='w-3/5 flex flex-wrap justify-center items-center gap-4'>";
+				echo "<span class='text-2xl font-semibold whitespace-nowrap'>" . htmlspecialchars($row['price']) . " P</span>";
+				echo "<button class='py-5 px-8 font-medium border-2 border-azure-400 border-opacity-70 rounded-2xl transition-colors cursor-pointer hover:border-opacity-100'>В корзину</button>";
+				echo "</div>";
+				echo "</div>";
+				echo "</div>";
+				echo "</div>";
+			}
+		} else {
+			echo "Курси не знайдено.";
+		}
+
+		$conn->close();
+		?>
+
+
 				</div>
 			</section>
-
 			<section class="w-full flex flex-col gap-[50px]">
 				<h2 class="w-full p-6 font-tactic font-medium text-azure-200 text-3xl xl:text-[44px] xl:leading-[44px] bg-neutral-800 border border-neutral-700 rounded-lg">
 					Отзывы
@@ -116,7 +172,19 @@
 			</section>
 		</div>
 	</main>
-
+	<div class="add-cart-modal" id="editModal">
+	<form class="creat-course">
+		<div class="close-add-modal">+</div>
+		<input type="text" name="title" placeholder="Назва" required>
+		<textarea name="description" placeholder="Опис"></textarea>
+		<input type="file" name="image" accept="image/*">
+		<input type="number" name="price" placeholder="Ціна" required>
+		<input type="checkbox" name="is_hit" value="1"> Хит
+		<input type="file" name="videos[]" accept="video/*" multiple>
+		<button type="submit">Добавить курс</button>
+	</form>
+	</div>
 	<?php include("./components/footer.php") ?>
+	<script src="./js/add-del.js"></script>
 </body>
 </html>
