@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:warface}/components/php-back/courses.db",
+            "name": "curs"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

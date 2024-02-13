@@ -1,0 +1,13 @@
+RewriteEngine On
+
+RewriteRule ^auth$ /pages/auth.php [L]
+RewriteRule ^about-us$ /pages/about-us.php [L]
+RewriteRule ^reviews$ /pages/reviews.php [L]
+RewriteRule ^courses$ /pages/courses.php [L]
+RewriteRule ^course-details$ /pages/course-details.php [L]
+RewriteRule ^user-courses$ /pages/user-courses.php [L]
+RewriteRule ^user-course$ /pages/user-course.php [L]
+RewriteRule ^forgot-password$ /pages/forgot-password.php [L]
+RewriteRule ^contacts$ /pages/contacts.php [L]
+
+ErrorDocument 404 /pages/404-page.php
